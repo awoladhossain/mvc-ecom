@@ -17,6 +17,7 @@
   "license": "ISC",
   "packageManager": "pnpm@10.20.0",
   "dependencies": {
+    "@upstash/redis": "^1.35.8",
     "bcrypt": "^6.0.0",
     "bullmq": "^5.65.1",
     "cloudinary": "^2.8.0",
