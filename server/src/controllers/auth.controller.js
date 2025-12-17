@@ -1,6 +1,7 @@
 import {
   loginService,
   logoutService,
+  refreshTokenService,
   signupService,
 } from "../services/auth.service.js";
 import { saveRefreshToken } from "../services/token.service.js";
@@ -9,7 +10,7 @@ import { generateToken } from "../utils/token.js";
 
 export const signup = async (req, res) => {
   const user = await signupService(req.body);
-  const { accessToken, refreshToken } = generateToken(user._id);
+  const { accessToken, refreshToken } = generateToken(user._id, user.role);
   await saveRefreshToken(user._id, refreshToken);
 
   // use setAuthCookies to set cookies
@@ -28,7 +29,7 @@ export const signup = async (req, res) => {
 
 export const login = async (req, res) => {
   const user = await loginService(req.body);
-  const { accessToken, refreshToken } = generateToken(user._id);
+  const { accessToken, refreshToken } = generateToken(user._id, user.role);
   await saveRefreshToken(user._id, refreshToken);
 
   // use setAuthCookies to set cookies
@@ -55,3 +56,22 @@ export const logout = async (req, res) => {
     message: "User logged out successfully",
   });
 };
+
+export const refreshToken = async (req, res) => {
+  const userId = req.user.userId;
+  const oldRefreshToken = req.cookies.refresh_token;
+  const { accessToken, refreshToken } = await refreshTokenService(
+    userId,
+    oldRefreshToken
+  );
+
+  // set new cookies
+  setAuthCookies(res, accessToken, refreshToken);
+
+  // send response
+  res.status(200).json({
+    status: "success",
+    message: "Token refreshed successfully",
+  });
+};
+

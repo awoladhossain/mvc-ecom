@@ -2,8 +2,10 @@
 export const errorHandler = (err, req, res, next) => {
   console.error(err);
 
-  res.status(err.status || 500).json({
+  const statusCode = err?.statusCode || err?.status || 500;
+
+  res.status(statusCode).json({
     status: "error",
-    message: err.message || "Something went wrong",
+    message: err?.message || "Something went wrong",
   });
 };

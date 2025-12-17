@@ -1,7 +1,11 @@
 export default class ApiError extends Error {
-  constructor(status, message) {
+  constructor(statusCode, message) {
     super(message);
-    this.status = status;
+
+    this.statusCode = statusCode; // ✅ REQUIRED
+    this.status = "error"; // optional but useful
+    this.isOperational = true;
+
     Error.captureStackTrace(this, this.constructor);
   }
 }
