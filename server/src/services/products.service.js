@@ -1,7 +1,7 @@
 import redis from "../config/redis.js";
 import Product from "../models/product.model.js";
 
-// services/products.service.js
+
 export const getAllProductsService = async () => {
   const products = await Product.find({});
   return products;
