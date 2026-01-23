@@ -1,10 +1,18 @@
 import { Redis } from "@upstash/redis";
-import dotenv from "dotenv";
-dotenv.config();
+let redis = null;
+export const getRedis = () => {
+  if (!redis) {
+    const url = process.env.UPSTASH_REDIS_REST_URL;
+    const token = process.env.UPSTASH_REDIS_REST_TOKEN;
 
-const redis = new Redis({
-  url: process.env.UPSTASH_REDIS_REST_URL,
-  token: process.env.UPSTASH_REDIS_REST_TOKEN,
-});
+    if (!url || !token) {
+      throw new Error("Missing Upstash Redis environment variables");
+    }
 
-export default redis;
+    redis = new Redis({
+      url,
+      token,
+    });
+  }
+  return redis;
+};

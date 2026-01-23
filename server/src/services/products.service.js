@@ -1,6 +1,6 @@
-import redis from "../config/redis.js";
+import cloudinary from "../config/cloudinary.js";
+import { getRedis } from "../config/redis.js";
 import Product from "../models/product.model.js";
-
 
 export const getAllProductsService = async () => {
   const products = await Product.find({});
@@ -8,6 +8,7 @@ export const getAllProductsService = async () => {
 };
 
 export const getFeaturedProductsService = async () => {
+  const redis = getRedis();
   let featuredProducts = await redis.get("featured_products");
   if (featuredProducts) {
     return JSON.parse(featuredProducts);
@@ -26,6 +27,19 @@ export const getFeaturedProductsService = async () => {
 };
 
 export const createProductService = async (data) => {
-  const product = await Product.create(data);
+  const { name, description, price, image, category } = data;
+  let cloudinaryResponse = null;
+  if (image) {
+    cloudinaryResponse = await cloudinary.uploader.upload(image, {
+      folder: "products",
+    });
+  }
+  const product = await Product.create({
+    name,
+    description,
+    price,
+    image: cloudinaryResponse?.url,
+    category,
+  });
   return product;
 };
