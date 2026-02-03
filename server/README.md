@@ -61,3 +61,5 @@ The following environment variables are required:
 * `CLOUDINARY_API_KEY` - The Cloudinary API key
 * `CLOUDINARY_API_SECRET` - The Cloudinary API secret
 * `CLOUDINARY_CLOUD_NAME` - The Cloudinary cloud name
+* `ACCESS_TOKEN_SECRET` - The Access token secret
+* `REFRESH_TOKEN_SECRET` - The Refresh token secret
