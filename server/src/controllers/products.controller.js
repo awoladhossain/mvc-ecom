@@ -1,5 +1,6 @@
 import {
   createProductService,
+  deleteProductService,
   getAllProductsService,
   getFeaturedProductsService,
 } from "../services/products.service.js";
@@ -30,3 +31,13 @@ export const createProduct = async (req, res) => {
     data: result,
   });
 };
+
+export const deleteProduct = async (req, res) => {
+  const { id } = req.params;
+  const result = await deleteProductService(id);
+  res.status(200).json({
+    status: "success",
+    message: "Product deleted successfully",
+    data: result,
+  });
+}

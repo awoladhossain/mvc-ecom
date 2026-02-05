@@ -1,6 +1,7 @@
 import express from "express";
 import {
   createProduct,
+  deleteProduct,
   getAllProducts,
   getFeaturedProducts,
 } from "../controllers/products.controller.js";
@@ -19,6 +20,13 @@ router.post(
   authMiddleware,
   adminMiddleware,
   asyncHandler(createProduct),
+);
+
+router.delete(
+  "/:id",
+  authMiddleware,
+  adminMiddleware,
+  asyncHandler(deleteProduct),
 );
 
 export default router;

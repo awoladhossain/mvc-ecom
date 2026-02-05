@@ -38,8 +38,26 @@ export const createProductService = async (data) => {
     name,
     description,
     price,
-    image: cloudinaryResponse?.url,
+    image: cloudinaryResponse?.secure_url,
     category,
   });
   return product;
+};
+
+export const deleteProductService = async (id) => {
+  const product = await Product.findById(id);
+  if (!product) {
+    throw new Error("Product not found");
+  }
+  if (product.image) {
+    const publicId = product.image.split("/").pop().split(".")[0];
+    try {
+      await cloudinary.uploader.destroy(`products/${publicId}`);
+      console.log("image deleted from cloudinary ");
+    } catch (error) {
+      console.log("error while deleting image from cloudinary", error);
+    }
+  }
+  await Product.findByIdAndDelete(id);
+  return true;
 };
