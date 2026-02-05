@@ -50,7 +50,8 @@ export const deleteProductService = async (id) => {
     throw new Error("Product not found");
   }
   if (product.image) {
-    const publicId = product.image.split("/").pop().split(".")[0];
+    const filename = product.image.split("/").pop();
+    const publicId = filename.substring(0, filename.lastIndexOf("."));
     try {
       await cloudinary.uploader.destroy(`products/${publicId}`);
       console.log("image deleted from cloudinary ");
@@ -60,4 +61,22 @@ export const deleteProductService = async (id) => {
   }
   await Product.findByIdAndDelete(id);
   return true;
+};
+
+export const getRecommendedProductsService = async () => {
+  const products = await Product.aggregate([
+    {
+      $sample: { size: 3 },
+    },
+    {
+      $project: {
+        _id: 1,
+        name: 1,
+        description: 1,
+        image: 1,
+        price: 1,
+      },
+    },
+  ]);
+  return products;
 };

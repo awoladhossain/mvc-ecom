@@ -3,6 +3,7 @@ import {
   deleteProductService,
   getAllProductsService,
   getFeaturedProductsService,
+  getRecommendedProductsService,
 } from "../services/products.service.js";
 
 export const getAllProducts = async (req, res) => {
@@ -40,4 +41,13 @@ export const deleteProduct = async (req, res) => {
     message: "Product deleted successfully",
     data: result,
   });
-}
+};
+
+export const getRecommendedProducts = async (req, res) => {
+  const result = await getRecommendedProductsService();
+  res.status(200).json({
+    status: "success",
+    message: "Recommended products fetched successfully",
+    data: result,
+  });
+};

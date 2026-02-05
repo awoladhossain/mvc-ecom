@@ -4,6 +4,7 @@ import {
   deleteProduct,
   getAllProducts,
   getFeaturedProducts,
+  getRecommendedProducts,
 } from "../controllers/products.controller.js";
 import {
   adminMiddleware,
@@ -15,6 +16,7 @@ const router = express.Router();
 
 router.get("/", authMiddleware, adminMiddleware, asyncHandler(getAllProducts));
 router.get("/featured", asyncHandler(getFeaturedProducts));
+router.get("/recommedations",asyncHandler(getRecommendedProducts))
 router.post(
   "/create",
   authMiddleware,
