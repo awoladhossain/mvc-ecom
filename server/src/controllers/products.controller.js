@@ -3,7 +3,9 @@ import {
   deleteProductService,
   getAllProductsService,
   getFeaturedProductsService,
+  getProductsByCategoryService,
   getRecommendedProductsService,
+  toggleFeaturedProductService,
 } from "../services/products.service.js";
 
 export const getAllProducts = async (req, res) => {
@@ -48,6 +50,29 @@ export const getRecommendedProducts = async (req, res) => {
   res.status(200).json({
     status: "success",
     message: "Recommended products fetched successfully",
+    data: result,
+  });
+};
+
+export const getProductsByCategory = async (req, res) => {
+  const { category } = req.params;
+  const result = await getProductsByCategoryService(category);
+  res.status(200).json({
+    status: "success",
+    message: `Products in category ${category} fetched successfully`,
+    data: result,
+  });
+};
+
+export const toggleFeaturedProduct = async (req, res) => {
+  const { id } = req.params;
+  const result = await toggleFeaturedProductService(id);
+
+  res.status(200).json({
+    status: "success",
+    message: `Product ${
+      result.isFeatured ? "added to" : "removed from"
+    } featured products`,
     data: result,
   });
 };

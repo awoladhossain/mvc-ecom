@@ -80,3 +80,18 @@ export const getRecommendedProductsService = async () => {
   ]);
   return products;
 };
+
+export const getProductsByCategoryService = async (category) => {
+  const products = await Product.find({ category });
+  return products;
+};
+
+export const toggleFeaturedProductService = async (id) => {
+  const product = await Product.findById(id);
+  if (!product) {
+    throw new Error("Product not found");
+  }
+  product.isFeatured = !product.isFeatured;
+  await product.save();
+  return product;
+};

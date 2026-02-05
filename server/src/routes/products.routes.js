@@ -4,7 +4,9 @@ import {
   deleteProduct,
   getAllProducts,
   getFeaturedProducts,
+  getProductsByCategory,
   getRecommendedProducts,
+  toggleFeaturedProduct,
 } from "../controllers/products.controller.js";
 import {
   adminMiddleware,
@@ -16,7 +18,11 @@ const router = express.Router();
 
 router.get("/", authMiddleware, adminMiddleware, asyncHandler(getAllProducts));
 router.get("/featured", asyncHandler(getFeaturedProducts));
-router.get("/recommedations",asyncHandler(getRecommendedProducts))
+router.get("/recommendations", asyncHandler(getRecommendedProducts));
+
+router.get("/category/:category", asyncHandler(getProductsByCategory));
+
+router.patch("/:id",authMiddleware,adminMiddleware, asyncHandler(toggleFeaturedProduct))
 router.post(
   "/create",
   authMiddleware,
