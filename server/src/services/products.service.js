@@ -92,6 +92,17 @@ export const toggleFeaturedProductService = async (id) => {
     throw new Error("Product not found");
   }
   product.isFeatured = !product.isFeatured;
-  await product.save();
-  return product;
+  const updatedProduct = await product.save();
+  await updateFeaturedProductsCache();
+  return updatedProduct;
 };
+
+async function updateFeaturedProductsCache() {
+  try {
+    const featuredProducts = await Product.find({ isFeatured: true }).lean();
+    const redis = getRedis();
+    redis.set("featured_products", JSON.stringify(featuredProducts));
+  } catch (error) {
+    console.error("Error updating featured products cache:", error);
+  }
+}
