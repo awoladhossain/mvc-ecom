@@ -27,7 +27,7 @@ export const getFeaturedProducts = async (req, res) => {
 };
 
 export const createProduct = async (req, res) => {
-  const result = await createProductService(req.body);
+  const result = await createProductService(req.body, req.file);
   res.status(200).json({
     status: "success",
     message: "Product created successfully",

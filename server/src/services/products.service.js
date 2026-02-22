@@ -26,24 +26,49 @@ export const getFeaturedProductsService = async () => {
   return featuredProducts;
 };
 
-export const createProductService = async (data) => {
-  const { name, description, price, image, category } = data;
-  let cloudinaryResponse = null;
-  if (image) {
-    cloudinaryResponse = await cloudinary.uploader.upload(image, {
+// export const createProductService = async (data) => {
+//   const { name, description, price, image, category } = data;
+//   let cloudinaryResponse = null;
+//   if (image) {
+//     cloudinaryResponse = await cloudinary.uploader.upload(image, {
+//       folder: "products",
+//       // resource_type: "auto",
+//     });
+//   }
+//   const product = await Product.create({
+//     name,
+//     description,
+//     price,
+//     image: cloudinaryResponse?.secure_url || "",
+//     category,
+//   });
+//   return product;
+// };
+
+export const createProductService = async (data, file) => {
+  const { name, description, price, category } = data;
+  let imageUrl = "";
+
+  if (file) {
+    // ফাইলটিকে Base64 এ রূপান্তর করে ক্লাউডিনারিতে পাঠানো
+    const base64Image = Buffer.from(file.buffer).toString("base64");
+    const dataURI = `data:${file.mimetype};base64,${base64Image}`;
+
+    const cloudinaryResponse = await cloudinary.uploader.upload(dataURI, {
       folder: "products",
     });
+    imageUrl = cloudinaryResponse.secure_url;
   }
+
   const product = await Product.create({
     name,
     description,
     price,
-    image: cloudinaryResponse?.secure_url,
+    image: imageUrl,
     category,
   });
   return product;
 };
-
 export const deleteProductService = async (id) => {
   const product = await Product.findById(id);
   if (!product) {
