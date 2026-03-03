@@ -1,5 +1,8 @@
 import express from "express";
-import { createCheckoutSessionController } from "../controllers/payment.controller.js";
+import {
+  checkoutSuccessController,
+  createCheckoutSessionController,
+} from "../controllers/payment.controller.js";
 import { authMiddleware } from "../middlewares/auth.middleware.js";
 
 const router = express.Router();
@@ -8,4 +11,6 @@ router.post(
   authMiddleware,
   createCheckoutSessionController,
 );
+
+router.post("/checkout-success", authMiddleware, checkoutSuccessController);
 export default router;
